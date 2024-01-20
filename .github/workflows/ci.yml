@@ -31,4 +31,5 @@ jobs:
                 node-version: ${{ matrix.node-version }}
             - run: npm ci # npm install과 동일
             - run: npm run build --if-present
+            - run: npm run lint
             - run: npm test
