@@ -1,0 +1,35 @@
+name: Node.js CI
+
+# 구독할 이벤트
+on:
+    push:
+        branches: [main]
+    pull-request:
+        branches: [main]
+
+# jobs 단위로 개별 서버(docker 컨테이너 단위)에서 작업이 수행된다.
+# 각 작업은 병렬로 실행되는데, needs: build와 같이 표시해서 기다릴 수도 있다.
+jobs:
+    build:
+        # Ubuntu, Windows, MacOS를 지원한다.
+        runs-on: ubuntu-latest
+
+        # node-version과 같이 배열로 되어있으면 각 원소를 돌면서 작업을 반복 실행한다.
+        # 응용해서 runs-on에 여러 OS에서 돌릴 수도 있다.
+        strategy:
+            matrix:
+                node-version: [14.x] # 템플릿 기본값: [10.x, 12.x, 14.x]
+
+        # uses: 다른 사람이 작성한 내용을 실행
+        # actions/checkout: Github의 마지막 커밋으로 Checkout
+        # actions/setup-node: Node.js를 설치
+        # run: 명령어를 실행
+        steps:
+            - uses: actions/checkout@v2
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                node-version: ${{ matrix.node-version }}
+            - run: npm ci # npm install과 동일
+            - run: npm run build --if-present
+            - run: npm test
