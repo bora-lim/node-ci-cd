@@ -18,16 +18,15 @@ jobs:
         # 응용해서 runs-on에 여러 OS에서 돌릴 수도 있다.
         strategy:
             matrix:
-                node-version: [14.x] # 템플릿 기본값: [10.x, 12.x, 14.x]
+                node-version: [16.14.2] # 템플릿 기본값: [10.x, 12.x, 14.x]
 
         # uses: 다른 사람이 작성한 내용을 실행
         # actions/checkout: Github의 마지막 커밋으로 Checkout
         # actions/setup-node: Node.js를 설치
         # run: 명령어를 실행
         steps:
-            - uses: actions/checkout@v2
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v1
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
               with:
                 node-version: ${{ matrix.node-version }}
             - run: npm ci # npm install과 동일
